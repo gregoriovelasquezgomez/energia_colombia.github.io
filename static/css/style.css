@@ -10,21 +10,21 @@ body {
   background-color: black;
 }
 
-
 .logo {
   max-width: 1000px;
   text-align: center;
+  text-emphasis-color: blue;
   margin: 10px;
-  padding: 40px 20px;
+  padding: 10px 10px;
   border: 15px solid rgb(189, 192, 189);
   background-color: rgb(206, 198, 198);
   font-size: 25px;
-  border-radius: 5%;
+  border-radius: 1%;
 }
 
 .parrafo {
   max-width: 1000px;
-  text-align: center;
+  text-align: left;
   margin: 10px;
   padding: 40px 20px;
   border: 15px solid rgb(232, 231, 237);
