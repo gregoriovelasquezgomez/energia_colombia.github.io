@@ -1,0 +1,46 @@
+html {
+  font-family: "Segoe UI", Arial, Helvetica, sans-serif; 
+  font-size: 20px
+}
+
+body {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: black;
+}
+
+
+.logo {
+  max-width: 1000px;
+  text-align: center;
+  margin: 10px;
+  padding: 40px 20px;
+  border: 15px solid rgb(189, 192, 189);
+  background-color: rgb(206, 198, 198);
+  font-size: 25px;
+  border-radius: 20%;
+}
+
+.parrafo {
+  max-width: 1000px;
+  text-align: center;
+  margin: 10px;
+  padding: 40px 20px;
+  border: 15px solid rgb(232, 231, 237);
+  background-color: rgb(206, 198, 198);
+  font-size: 15px;
+  border-radius: 5%;
+}
+
+
+.plot_box {
+  max-width: 1000px;
+  text-align: center;
+  margin: 10px;
+  padding: 40px 20px;
+  border: 15px solid rgb(198, 193, 190);
+  background-color: white;
+  font-size: 25px;
+  border-radius: 20%;
+}

@@ -5,7 +5,7 @@
     <div class="title">
       <title>Energía Colombia</title>
     </div>
-    <link rel="stylesheet" href="../static/css/templates.css">
+    <link rel="stylesheet" href="../static/css/style.css">
     <script src='https://cdn.jsdelivr.net/npm/chart.js@2.9.4/dist/Chart.min.js'></script>
   </head>
 
@@ -18,13 +18,13 @@
       </div>
       <div class="parrafo">
         <p>
-            El inicio de una linda historia
+            El inicio de una linda historia.
         </p>
         <p>
           Este es un test para aprender a poner una grafica en una web app con Flask. Un ejercicio básico con home.html para mostrar la app al usuario, style.css para modificar el aspecto de la página haciendo uso del css box model y main.py para el uso básico del backend con Flask. La grafica se creó por medio de chart.js
         </p>
       </div>
-      <div>
+      <div class="plot_box">
         <canvas id="lineChart" width="900" height="400"></canvas>
         <script>
           var ctx = document.getElementById("lineChart").getContext("2d");
