@@ -5,8 +5,22 @@
     <div class="title">
       <title>Energía Colombia</title>
     </div>
+
+    <!-- Charlist-->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/chartist.js/latest/chartist.min.css">
+    <script src="https://cdn.jsdelivr.net/chartist.js/latest/chartist.min.js"></script>
+
+    <!-- Bootstraps Java Scipts Links -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+
+    <!-- JQuery links  -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+    <!-- ruta a embellecedor - css  -->
     <link rel="stylesheet" href="../static/css/style.css">
-    <script src='https://cdn.jsdelivr.net/npm/chart.js@2.9.4/dist/Chart.min.js'></script>
   </head>
 
   <body>
@@ -24,33 +38,59 @@
           Este es un test para aprender a poner una grafica en una web app con Flask. Un ejercicio básico con home.html para mostrar la app al usuario, style.css para modificar el aspecto de la página haciendo uso del css box model y main.py para el uso básico del backend con Flask. La grafica se creó por medio de chart.js
         </p>
       </div>
-      <div class="plot_box">
-        <canvas id="lineChart" width="900" height="400"></canvas>
+
+      <div class="plot_box1">
+
+        <!-- este es un comentario solamente: esta parte es script de java script -->
         <script>
-          var ctx = document.getElementById("lineChart").getContext("2d");
-          var lineChart = new Chart(ctx, {
-            type: "line",
-            data: {
-              labels: {{ labels | safe }},
-              datasets: [
-                {
-                  label: "Data points",
-                  data: {{ values | safe }},
-                  fill: true,
-                  borderColor: "rgb(75, 0, 192)",
-                  lineTension: 0,
-                }
-              ]
-            },
-            options: {
-              responsive: true
+          class MyCharts{
+            constructor(xData, YData, width, height)
+            {
+                this.XData = XData;
+                this.YData = YData;
+                this.width = width;
+                this.height= height;
             }
-          })
+            createGraph()
+            {
+                var data =
+                    {
+                      labels: this.XData,
+                      series:[
+                          this.YData
+                      ]
+                    }
+
+                var options = {
+                    width:this.width,
+                    height:this.height,
+                    axisX:{
+                        showGrid:true,
+                        showLabel:true
+                    },
+                    axisY:{
+                        offset:60
+                    }
+                };
+                new Chartist.Line('.plot_box1', data, options);
+            }
+          }
+          var XData= ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'];
+          var YData = $.get('/Random_Data');
+
+          var data_from_flask = YData.done(
+            function (resp) {
+              console.log("JSON DATA", resp.YData);
+              var my_obj = new MyCharts(XData, resp.YData, 500, 300);
+              my_obj.createGraph();
+            })
         </script>
       </div>
 
-      <div>
-
+      <div class="parrafo">
+        <p>
+          Este es otro parrafo con class="parrafo" que recibe las mismas caracteristicas desde stype.css
+        </p>
       </div>
 
     </header>
