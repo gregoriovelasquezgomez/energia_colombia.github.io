@@ -35,16 +35,17 @@
             El inicio de una linda historia.
         </p>
         <p>
-          Este es un test para aprender a poner una grafica en una web app con Flask. Un ejercicio básico con home.html para mostrar la app al usuario, style.css para modificar el aspecto de la página haciendo uso del css box model y main.py para el uso básico del backend con Flask. La grafica se creó por medio de chart.js
+          Este es un test para aprender a poner una grafica en una web app con Flask. Un ejercicio básico con home.html para mostrar la app al usuario, style.css para modificar el aspecto de la página haciendo uso del css box model y main.py para el uso básico del backend con Flask. La grafica se creó por medio de chartist en JavaScript
         </p>
       </div>
 
       <div class="plot_box1">
 
-        <!-- este es un comentario solamente: esta parte es script de java script -->
+        <!-- esta parte es script de java script -->
         <script>
+          // clase para creat graficas
           class MyCharts{
-            constructor(xData, YData, width, height)
+            constructor(XData, YData, width, height)
             {
                 this.XData = XData;
                 this.YData = YData;
@@ -69,21 +70,38 @@
                         showLabel:true
                     },
                     axisY:{
-                        offset:60
-                    }
+                        offset:30, 
+                        position: 'start',
+                        axisYmin: 0
+                        
+                    },
+                    labelOffset: {
+                      x: 0,
+                      y: 0
+                    },
+                    
+                    low: 0
                 };
                 new Chartist.Line('.plot_box1', data, options);
             }
           }
-          var XData= ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'];
-          var YData = $.get('/Random_Data');
+          
+          //<!-- Recepción de datos desde el back end de flask -->
+          var XData = [1,2,3];
+          var YData = $.get('/Example_Data');
+          //var XData = $.get('/Example_Data');
+          
 
-          var data_from_flask = YData.done(
+          var plot_with_flask_data = YData.done(
             function (resp) {
               console.log("JSON DATA", resp.YData);
-              var my_obj = new MyCharts(XData, resp.YData, 500, 300);
+              var width = 500;
+              var height= 300;
+              var my_obj = new MyCharts(XData, resp.YData, width, height);
               my_obj.createGraph();
-            })
+            }
+          )
+
         </script>
       </div>
 
