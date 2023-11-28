@@ -34,11 +34,11 @@ def datos_SiMEM():
 
         # Organización de información en una tabla Pandas
         data = pd.read_json(response.text)
-        aportes_hidr = pd.json_normalize(data.loc['records']['result'])
+        data_norm = pd.json_normalize(data.loc['records']['result'])
         # print(aportes_hidr.head())
-        return render_template("datos_SiMEM.html", aportes_hidr=aportes_hidr.columns)
+        return render_template("datos_SiMEM.html", data_columns=data_norm.columns)
     else:
-        return render_template("datos_SiMEM.html")
+        return render_template("datos_SiMEM.html", data_columns=[''])
 
 @app.route('/Example_Data', methods=["GET", "POST"])
 def Example_Data():

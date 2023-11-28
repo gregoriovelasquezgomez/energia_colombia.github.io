@@ -56,9 +56,33 @@
         </form>
       </div>
 
-      <p>
-        {{aportes_hidr}}
-      </p>
+      <div class="data_plot">
+        <!-- ruta a embellecedor - css  
+        <p>
+          {{data_columns}}
+        </p>
+        -->
+        <p>Selecciona los valores de los ejes X y Y del set de datos para graficar</p>
+        <form action="/">
+          <label for="x_axis_options">Valores eje X:</label>
+          <select id="x_axis_options" name="x_axis_options", method="GET", action="/">
+            {% for column in data_columns[1:] %}
+            <option value="{{column}}" SELECTED>{{column}}</option>
+            {% endfor %}
+          </select>
+        </form>
+        <form action="/">
+          <label for="y_axis_options">Valores eje Y:</label>
+          <select id="y_axis_options" name="y_axis_options", method="GET", action="/">
+            {% for column in data_columns[1:] %}
+            <option value="{{column}}" SELECTED>{{column}}</option>
+            {% endfor %}
+          </select>
+        </form>
+      </div>
+    
+
+
 
 
       <div class="plot_box1">
