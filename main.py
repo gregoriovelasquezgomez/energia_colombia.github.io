@@ -2,7 +2,7 @@
 @author: gregoriovelasquezgomez, StevenJG
 """
 # librerias
-from flask import Flask, render_template
+from flask import Flask, render_template, request
 import random 
 import json
 from time import time
@@ -23,19 +23,22 @@ def home():
 @app.route("/datos_SiMEM", methods=["GET", "POST"])
 def datos_SiMEM():
     # Configuración de entrada
-    start_date = "2023-11-15"
-    end_date = "2023-11-17"
-    dataset_id_SiMEM= "2bff14" #id aportes hídricos
+    if request.method == 'POST':
+        start_date = request.form['start_date']
+        end_date = request.form['end_date']
+        dataset_id_SiMEM= request.form['dataset_id_SiMEM'] #"2bff14" #id aportes hídricos 
 
-    # Conexión a la información de SiMEM
-    url = "https://www.simem.co/backend-files/api/PublicData?startdate=" + start_date + "&enddate=" + end_date + "&datasetId=" + dataset_id_SiMEM
-    response = requests.get(url)
+        # Conexión a la información de SiMEM
+        url = "https://www.simem.co/backend-files/api/PublicData?startdate=" + start_date + "&enddate=" + end_date + "&datasetId=" + dataset_id_SiMEM
+        response = requests.get(url)
 
-    # Organización de información en una tabla Pandas
-    data = pd.read_json(response.text)
-    aportes_hidr = pd.json_normalize(data.loc['records']['result'])
- 
-    return aportes_hidr.head().to_dict()
+        # Organización de información en una tabla Pandas
+        data = pd.read_json(response.text)
+        aportes_hidr = pd.json_normalize(data.loc['records']['result'])
+        # print(aportes_hidr.head())
+        return render_template("datos_SiMEM.html", aportes_hidr=aportes_hidr.columns)
+    else:
+        return render_template("datos_SiMEM.html")
 
 @app.route('/Example_Data', methods=["GET", "POST"])
 def Example_Data():

@@ -33,6 +33,17 @@ body {
   border-radius: 5%;
 }
 
+.datos_entrada {
+  max-width: 1000px;
+  text-align: left;
+  margin: 10px;
+  padding: 40px 20px;
+  border: 15px solid rgb(232, 231, 237);
+  background-color: rgb(206, 198, 198);
+  font-size: 15px;
+  border-radius: 5%;
+}
+
 
 .plot_box1 {
   max-width: 1000px;

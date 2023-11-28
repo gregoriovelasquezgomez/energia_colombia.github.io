@@ -32,12 +32,34 @@
       </div>
       <div class="parrafo">
         <p>
-            El inicio de una linda historia.
+          En esta pagina podras consultar datos del SiMEM a través su API. Ingresa los siguientes datos para empezar:
         </p>
-        <p>
-          Este es un test para aprender a poner una grafica en una web app con Flask. Un ejercicio básico con home.html para mostrar la app al usuario, style.css para modificar el aspecto de la página haciendo uso del css box model y main.py para el uso básico del backend con Flask. La grafica se creó por medio de chartist en JavaScript
-        </p>
+        <p>Ten en cuenta:</p>
+        <p>Demanda largo plazo: 596c1c</p>
+        <p>Aportes Hidricos: 2bff14</p>
+            
+        <p>Haz click en Enviar para analizar los datos de entrada.</p>
       </div>
+
+      <div class="datos_entrada">
+        <form method="POST">
+          <label for="start_date">Fecha de inicio:</label>
+          <input type="text" value="2023-11-22" placeholder="2023-11-22" id="start_date" name="start_date"><br><br>
+
+          <label for="end_date">Fecha final:</label>
+          <input type="text" value="2023-11-23" placeholder="2023-11-23"  id="end_date" name="end_date"><br><br>
+
+          <label for="dataset_id_SiMEM">DatasetID (consulta el id en https://www.simem.co/):</label>
+          <input type="text" value="2bff14" placeholder="2bff14"  id="dataset_id_SiMEM" name="dataset_id_SiMEM"><br><br>
+
+          <input type="submit" value="Enviar">
+        </form>
+      </div>
+
+      <p>
+        {{aportes_hidr}}
+      </p>
+
 
       <div class="plot_box1">
 
@@ -103,12 +125,6 @@
           )
 
         </script>
-      </div>
-
-      <div class="parrafo">
-        <p>
-          Este es otro parrafo con class="parrafo" que recibe las mismas caracteristicas desde stype.css
-        </p>
       </div>
 
     </header>
