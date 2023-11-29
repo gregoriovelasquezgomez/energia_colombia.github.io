@@ -49,15 +49,18 @@
           <label for="end_date">Fecha final:</label>
           <input type="text" value="2023-11-23" placeholder="2023-11-23"  id="end_date" name="end_date"><br><br>
 
-          <label for="dataset_id_SiMEM">DatasetID (consulta el id en https://www.simem.co/):</label>
+          <label for="dataset_id_SiMEM">DatasetID (consulta el id en 
+            <a href="https://www.simem.co/"  target="_blank">https://www.simem.co/</a>
+            ):
+          </label>
           <input type="text" value="2bff14" placeholder="2bff14"  id="dataset_id_SiMEM" name="dataset_id_SiMEM"><br><br>
 
           <input type="submit" value="Enviar">
         </form>
       </div>
 
-      <div class="data_plot">
-        <!-- ruta a embellecedor - css  
+      <div class="plot_data_selection">
+        <!-- aqui se crean los dropdown menus de las columnas del dataframe que se quieren plotear
         <p>
           {{data_columns}}
         </p>
@@ -65,7 +68,7 @@
         <p>Selecciona los valores de los ejes X y Y del set de datos para graficar</p>
         <form action="/">
           <label for="x_axis_options">Valores eje X:</label>
-          <select id="x_axis_options" name="x_axis_options", method="GET", action="/">
+          <select id="x_axis_options" name="x_axis_options", method="GET", action="/", onchange="plot_simem_data()">
             {% for column in data_columns[1:] %}
             <option value="{{column}}" SELECTED>{{column}}</option>
             {% endfor %}
@@ -73,23 +76,41 @@
         </form>
         <form action="/">
           <label for="y_axis_options">Valores eje Y:</label>
-          <select id="y_axis_options" name="y_axis_options", method="GET", action="/">
+          <select id="y_axis_options" name="y_axis_options", method="GET", action="/", onchange="plot_simem_data()">
             {% for column in data_columns[1:] %}
             <option value="{{column}}" SELECTED>{{column}}</option>
             {% endfor %}
           </select>
         </form>
       </div>
-    
+      
+      <!-- idea inicial de como crear grafica basado en selección del dropdown menu
+      <div >
+        <script>
+          function plot_simem_data() 
+          {
+            new Chartist.Line('.ct-chart', {
+              labels: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
+              series: {{data_norm}} 
+            }, {
+              fullWidth: true,
+              chartPadding: {
+                right: 40
+              }
+            });
 
-
+          }
+            
+        </script>
+      </div>
+       -->
 
 
       <div class="plot_box1">
 
         <!-- esta parte es script de java script -->
         <script>
-          // clase para creat graficas
+          // definición de la clase que creará la gráfica
           class MyCharts{
             constructor(XData, YData, width, height)
             {
@@ -137,7 +158,7 @@
           var YData = $.get('/Example_Data'); //<!-- Recepción de datos desde el backend de flask -->
           //var XData = $.get('/Example_Data');
           
-
+          //<!-- creación de la gráfica -->
           var plot_with_flask_data = YData.done(
             function (resp) {
               console.log("JSON DATA", resp.YData); //<!-- para testear que los datos fueron recibidos en html -->

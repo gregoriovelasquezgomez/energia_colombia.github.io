@@ -36,7 +36,7 @@ def datos_SiMEM():
         data = pd.read_json(response.text)
         data_norm = pd.json_normalize(data.loc['records']['result'])
         # print(aportes_hidr.head())
-        return render_template("datos_SiMEM.html", data_columns=data_norm.columns)
+        return render_template("datos_SiMEM.html", data_columns=data_norm.columns, data_norm = data_norm)
     else:
         return render_template("datos_SiMEM.html", data_columns=[''])
 
