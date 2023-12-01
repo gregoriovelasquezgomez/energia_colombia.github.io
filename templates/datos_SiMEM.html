@@ -6,6 +6,9 @@
       <title>Energía Colombia</title>
     </div>
 
+    <!-- Chart.js-->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.4/dist/Chart.min.js"></script>
+
     <!-- Charlist-->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/chartist.js/latest/chartist.min.css">
     <script src="https://cdn.jsdelivr.net/chartist.js/latest/chartist.min.js"></script>
@@ -32,7 +35,7 @@
       </div>
       <div class="parrafo">
         <p>
-          En esta pagina podras consultar datos del SiMEM a través su API. Ingresa los siguientes datos para empezar:
+          Con esta app podras consultar datos del SiMEM a través su API. Ingresa los siguientes datos para empezar:
         </p>
         <p>Ten en cuenta:</p>
         <p>Demanda largo plazo: 596c1c</p>
@@ -60,118 +63,79 @@
       </div>
 
       <div class="plot_data_selection">
-        <!-- aqui se crean los dropdown menus de las columnas del dataframe que se quieren plotear
-        <p>
-          {{data_columns}}
-        </p>
-        -->
+        <!-- aqui se crean los dropdown menus de las columnas del dataframe que se quieren plotear-->
+        <table class="table">
+          <tr class="table__header">
+            <th class="table__cell">Variables disponibles en el set de datos:</th>
+          </tr>
+          {% for row in data_columns%}
+            <tr class="table__cell">
+              <td>{{row}}</td>
+            </tr>
+          {% endfor %}
+        </table>
+        
+        <p>Cabecera del set de datos:</p>
+        <p>{{data_norm}}</p>
+
         <p>Selecciona los valores de los ejes X y Y del set de datos para graficar</p>
-        <form action="/">
-          <label for="x_axis_options">Valores eje X:</label>
-          <select id="x_axis_options" name="x_axis_options", method="GET", action="/", onchange="plot_simem_data()">
+        <form method="POST" action="/">
+          <label for="x_axis">Valores eje X:</label>
+          <select id="x_axis" name="x_axis", method="POST", action="/", onchange="updatePlot()">
             {% for column in data_columns[1:] %}
             <option value="{{column}}" SELECTED>{{column}}</option>
             {% endfor %}
           </select>
         </form>
-        <form action="/">
-          <label for="y_axis_options">Valores eje Y:</label>
-          <select id="y_axis_options" name="y_axis_options", method="GET", action="/", onchange="plot_simem_data()">
+        <form method="POST" action="/">
+          <label for="y_axis">Valores eje Y:</label>
+          <select id="y_axis" name="y_axis", method="POST", action="/", onchange="updatePlot()">
             {% for column in data_columns[1:] %}
             <option value="{{column}}" SELECTED>{{column}}</option>
             {% endfor %}
           </select>
         </form>
       </div>
-      
-      <!-- idea inicial de como crear grafica basado en selección del dropdown menu
-      <div >
-        <script>
-          function plot_simem_data() 
-          {
-            new Chartist.Line('.ct-chart', {
-              labels: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
-              series: {{data_norm}} 
-            }, {
-              fullWidth: true,
-              chartPadding: {
-                right: 40
-              }
-            });
 
-          }
+      <p>this is the current value of x_axis:</p>
+      <p id="x_value_selected"></p>
+      <p>this is the current value of y_axis:</p>
+      <p id="y_value_selected"></p>
+                
+      <!-- idea inicial de como crear grafica basado en selección del dropdown menu -->
+      <canvas id="lineChart" with="100" height="100"></canvas>
+        <script>
+            function updatePlot() {
+                //with chartist
+                var x_axis = document.getElementById('x_axis').value;
+                var y_axis = document.getElementById('y_axis').value;
+
+                //write current value of axis to pharagraph
+                document.getElementById('x_value_selected').innerHTML = x_axis;
+                document.getElementById('y_value_selected').innerHTML = y_axis;
+
+                //with Chart.js
+                var ctx = document.getElementById("lineChart").getContext("2d");
+                var lineChart = new Chart(ctx, {
+                  type: "line",
+                  data: {
+                    labels: {{labels|safe}},
+                    datasets: [
+                      {
+                        label: y_axis,
+                        data: {{values|safe}},
+                        fill: false,
+                        borderColor: "rgb(75, 192, 192)",
+                        lineTension: 0.1
+                      }
+                    ]
+                  }
+                })
+            }
             
+            updatePlot();
         </script>
-      </div>
-       -->
-
-
-      <div class="plot_box1">
-
-        <!-- esta parte es script de java script -->
-        <script>
-          // definición de la clase que creará la gráfica
-          class MyCharts{
-            constructor(XData, YData, width, height)
-            {
-                this.XData = XData;
-                this.YData = YData;
-                this.width = width;
-                this.height= height;
-            }
-            createGraph()
-            {
-                var data =
-                    {
-                      labels: this.XData,
-                      series:[
-                          this.YData
-                      ]
-                    }
-
-                var options = {
-                    width:this.width,
-                    height:this.height,
-                    axisX:{
-                        showGrid:true,
-                        showLabel:true
-                    },
-                    axisY:{
-                        offset:30, 
-                        position: 'start',
-                        axisYmin: 0
-                        
-                    },
-                    labelOffset: {
-                      x: 0,
-                      y: 0
-                    },
-                    
-                    low: 0
-                };
-                new Chartist.Line('.plot_box1', data, options);
-            }
-          }
-          
-          //<!-- Manejo de los datos -->
-          var XData = [1,2,3]; //<!-- hard coded -->
-          var YData = $.get('/Example_Data'); //<!-- Recepción de datos desde el backend de flask -->
-          //var XData = $.get('/Example_Data');
-          
-          //<!-- creación de la gráfica -->
-          var plot_with_flask_data = YData.done(
-            function (resp) {
-              console.log("JSON DATA", resp.YData); //<!-- para testear que los datos fueron recibidos en html -->
-              var width = 500;
-              var height= 300;
-              var my_obj = new MyCharts(XData, resp.YData, width, height);
-              my_obj.createGraph();
-            }
-          )
-
-        </script>
-      </div>
-
+      
     </header>
   </body>
 </html>
