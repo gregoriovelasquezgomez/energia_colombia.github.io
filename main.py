@@ -49,13 +49,16 @@ def datos_SiMEM():
         data = pd.read_json(response.text)
         data_norm = pd.json_normalize(data.loc['records']['result'])
         data_columns = data_norm.columns
+        data_norm = data_norm.to_dict(orient='list')
+        # data_norm = json.dumps(data_norm)
+        # data_norm = data_norm.to_dict(orient='list')
         # print(aportes_hidr.head())
 
         # selección de datos para la grafica basado en los dropdown menus
         x_axis = request.values.get('x_axis')
         y_axis = request.values.get('y_axis')
 
-        if x_axis in data_norm.columns and y_axis in data_norm.columns:
+        if x_axis in data_columns and y_axis in data_columns:
             # Extract selected columns from the DataFrame
             selected_data = data_norm[[x_axis, y_axis]]
 
@@ -81,7 +84,13 @@ def datos_SiMEM():
                                 labels = labels,
                                 values = values
                                 )
-    
+
+
+
+
+
+
+
 @app.route("/test" , methods=['GET', 'POST'])
 def test():
     select = request.form.get('x_axis')
