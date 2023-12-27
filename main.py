@@ -8,6 +8,7 @@ import json
 from time import time
 import requests
 import pandas as pd
+from io import StringIO 
 
 
 
@@ -31,6 +32,8 @@ def datos_SiMEM():
         ("02-01-2020", 1456),
         ("03-01-2020", 1908),
     ]
+    
+    # inicialización de varaibles
     labels = [row[0] for row in data_example]
     values = [row[1] for row in data_example]
 
@@ -44,7 +47,7 @@ def datos_SiMEM():
         response = requests.get(url)
 
         # Organización de información en una tabla Pandas
-        data = pd.read_json(response.text)
+        data = pd.read_json(StringIO(response.text))
         data_norm = pd.json_normalize(data.loc['records']['result'])
         data_columns = data_norm.columns
         data_norm = data_norm.to_dict(orient='list')
@@ -59,16 +62,12 @@ def datos_SiMEM():
         if x_axis in data_columns and y_axis in data_columns:
             # Extract selected columns from the DataFrame
             selected_data = data_norm[[x_axis, y_axis]]
-
             labels = selected_data[x_axis].tolist()
             values = selected_data[y_axis].tolist()
-
-            return render_template("datos_SiMEM.html", 
-                                data_columns=data_columns,
-                                data_norm=data_norm,
-                                labels = labels,
-                                values = values
-                                )
+        else:
+            labels = []
+            values = []
+            
         return render_template("datos_SiMEM.html", 
                                 data_columns=data_columns,
                                 data_norm=data_norm,
