@@ -8,9 +8,6 @@ import json
 from time import time
 import requests
 import pandas as pd
-import numpy as np
-import matplotlib.cm as cm
-from matplotlib import rcParams
 
 
 
@@ -27,7 +24,8 @@ def datos_SiMEM():
     y_axis = "-"
     data_norm = pd.DataFrame()
     data_columns = data_norm.columns
-
+    data_norm = data_norm.to_dict(orient='list')
+    
     data_example = [
         ("01-01-2020", 1597),
         ("02-01-2020", 1456),

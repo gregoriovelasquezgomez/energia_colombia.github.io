@@ -9,7 +9,7 @@
     <!-- Chart.js-->
     <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.4/dist/Chart.min.js"></script>
 
-    <!-- Charlist-->
+    <!-- Chartist-->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/chartist.js/latest/chartist.min.css">
     <script src="https://cdn.jsdelivr.net/chartist.js/latest/chartist.min.js"></script>
 
@@ -75,6 +75,7 @@
           {% endfor %}
         </table>
         
+
         <p>Cabecera del set de datos:</p>
         <p>{{data_norm}}</p>
         -->
@@ -112,49 +113,142 @@
         <script>
           try {
             var data_js = JSON.parse('{{data_norm | tojson}}'.replace(/\bNaN\b/g, "null"));
+            console.log("JSON_data", data_js);
           }
           catch (error) {
             console.log('Error parsing JSON:', error, '{{data_norm | tojson}}'.replace(/\bNaN\b/g, "null"));
           }
           
-            function updatePlot() {
-                //with chartist
-                var x_axis = document.getElementById('x_axis').value;
-                var y_axis = document.getElementById('y_axis').value;
-                //var data_js = '{{data_norm}}';
-                
-                //write current value of axis to pharagraph
-                //document.getElementById('x_value_selected').innerHTML = x_axis;
-                //document.getElementById('y_value_selected').innerHTML = y_axis;
-
-                console.log("JSON_x_axis", x_axis);
-                
-                var labels = data_js[x_axis.toString()];
-                var values = data_js[y_axis.toString()];
-
-                console.log("JSON_labels", data_js[x_axis.toString()]);
-                console.log("JSON_values", data_js[y_axis.toString()]);
-
-                //with Chart.js
-                var ctx = document.getElementById("lineChart").getContext("2d");
-                var lineChart = new Chart(ctx, {
-                  type: "line",
-                  data: {
-                    labels: labels, //{{labels|safe}},
-                    datasets: [
-                      {
-                        label: y_axis,
-                        data: values, //{{values|safe}},
-                        fill: false,
-                        borderColor: "rgb(75, 192, 192)",
-                        lineTension: 0.1
-                      }
-                    ]
+          plot_counter = 0
+          //Creation of the default plot
+          var x_axis = document.getElementById('x_axis').value;
+          var y_axis = document.getElementById('y_axis').value;
+          var labels = data_js[x_axis.toString()];
+          var values = data_js[y_axis.toString()];
+          
+          var ctx = document.getElementById("lineChart").getContext("2d");
+          var mychart = new Chart(ctx, { 
+            type: "line",
+            data: {
+              labels: labels, //{{labels|safe}},
+              datasets: [
+                {
+                  label: y_axis,
+                  data: values, //{{values|safe}},
+                  fill: false,
+                  borderColor: "rgb(75, 192, 192)",
+                  lineTension: 0.1
+                }
+              ]
+            },
+            options: {
+              responsive: true,
+              title: {
+                display: false,
+                text: 'example title'
+              },
+              tooltips: {
+                mode: 'index',
+                intersect: false,
+              },
+              hover: {
+                mode: 'nearest',
+                intersect: true
+              },
+              scales: {
+                xAxes: [{
+                  display: true,
+                  scaleLabel: {
+                    display: true,
+                    labelString: x_axis
                   }
-                })
+                }],
+                yAxes: [{
+                  display: true,
+                  scaleLabel: {
+                    display: true,
+                    labelString: y_axis
+                  },
+                  //TODO: verificar el uso de ticks
+                  locale: 'de-DE',
+                  tick: {
+                    callback: (value, index, values) => {
+                      return new Intl.NumberFormat('en-EU',{
+                        style: 'currency',
+                        currency: 'EUR',
+                        maximumSignificantDigits: 3
+                      }).format(value);
+                    }
+                  }
+                }]
+              }
             }
+          });
+          
+          
+          function updatePlot() {  
+            //with chartist
+            x_axis = document.getElementById('x_axis').value;
+            y_axis = document.getElementById('y_axis').value;
+            //var data_js = '{{data_norm}}';
             
-            updatePlot();
+            //write current value of axis to pharagraph
+            //document.getElementById('x_value_selected').innerHTML = x_axis;
+            //document.getElementById('y_value_selected').innerHTML = y_axis;
+
+            //console.log("JSON_x_axis", x_axis);
+            
+            labels = data_js[x_axis.toString()];
+            values = data_js[y_axis.toString()];
+
+            //console.log("JSON_labels", data_js[x_axis.toString()]);
+            //console.log("JSON_values", data_js[y_axis.toString()]);
+
+            //with Chart.js
+            
+            
+            mychart.data.labels = labels;
+            mychart.data.datasets = [
+              {
+                label: y_axis,
+                data: values, //{{values|safe}},
+                fill: true,
+                borderColor: "rgb(75, 192, 0)",
+                lineTension: 0.1
+              }
+            ];
+            mychart.options.scales = {
+              xAxes: [{
+                display: true,
+                scaleLabel: {
+                  display: true,
+                  labelString: x_axis
+                }
+              }],
+              yAxes: [{
+                display: true,
+                scaleLabel: {
+                  display: true,
+                  labelString: y_axis
+                }, 
+              }],
+              y: {
+                tick: {
+                  callback: (value, index, values) => {
+                    return new Intl.NumberFormat('en-EU',{
+                      style: 'currency',
+                      currency: 'EUR',
+                      maximumSignificantDigits: 3
+                    }).format(value);
+                  }
+                } 
+              }
+            };
+
+            mychart.update();
+            //alert("GOT THERE");
+          }
+            
         </script>
       
     </header>
