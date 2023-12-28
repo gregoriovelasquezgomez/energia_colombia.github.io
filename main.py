@@ -17,6 +17,10 @@ app = Flask(__name__)
 def home():
     return render_template("home.html")
 
+@app.route("/ejemplo", methods=["GET", "POST"])
+def ejemplo():
+    return render_template("ejemplo.html")
+
 @app.route("/datos_SiMEM", methods=["GET", "POST"])
 def datos_SiMEM():
     # Configuración de entrada
@@ -84,6 +88,9 @@ def datos_SiMEM():
 
 
 
+@app.route("/contacto" , methods=['GET', 'POST'])
+def contacto():
+    return render_template("contacto.html")
 
 
 

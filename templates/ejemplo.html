@@ -1,0 +1,80 @@
+{% extends 'base.html' %}
+{% block content%}
+    <div class="parrafo">
+        <p>
+        Este es un test para aprender a poner una grafica en una web app con Flask. Un ejercicio básico con home.html para mostrar la app al usuario, style.css para modificar el aspecto de la página haciendo uso del css box model y main.py para el uso básico del backend con Flask. La grafica se creó por medio de chartist en JavaScript
+        </p>
+    </div>
+
+    <div class="plot_box1">
+
+        <!-- esta parte es script de java script -->
+        <script>
+        // clase para creat graficas
+        class MyCharts{
+            constructor(XData, YData, width, height)
+            {
+                this.XData = XData;
+                this.YData = YData;
+                this.width = width;
+                this.height= height;
+            }
+            createGraph()
+            {
+                var data =
+                    {
+                    labels: this.XData,
+                    series:[
+                        this.YData
+                    ]
+                    }
+
+                var options = {
+                    width:this.width,
+                    height:this.height,
+                    axisX:{
+                        showGrid:true,
+                        showLabel:true
+                    },
+                    axisY:{
+                        offset:30, 
+                        position: 'start',
+                        axisYmin: 0
+                        
+                    },
+                    labelOffset: {
+                    x: 0,
+                    y: 0
+                    },
+                    
+                    low: 0
+                };
+                new Chartist.Line('.plot_box1', data, options);
+            }
+        }
+        
+        //<!-- Manejo de los datos -->
+        var XData = [1,2,3]; //<!-- hard coded -->
+        var YData = $.get('/Example_Data'); //<!-- Recepción de datos desde el backend de flask -->
+        //var XData = $.get('/Example_Data');
+        
+
+        var plot_with_flask_data = YData.done(
+            function (resp) {
+            console.log("JSON DATA", resp.YData); //<!-- para testear que los datos fueron recibidos en html -->
+            var width = 500;
+            var height= 300;
+            var my_obj = new MyCharts(XData, resp.YData, width, height);
+            my_obj.createGraph();
+            }
+        )
+
+        </script>
+    </div>
+
+    <div class="parrafo">
+        <p>
+        Este es otro parrafo con class="parrafo" que recibe las mismas caracteristicas desde stype.css
+        </p>
+    </div>
+{% endblock %}

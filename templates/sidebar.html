@@ -1,0 +1,44 @@
+{% block content%}
+<div class="sidebar">
+    <div class="top">
+      <div class="logo">
+          <i class="bx bx-caret-right"></i>
+          <span>Energía Colombia</span>
+      </div>
+      <i class="bx bx-menu" id="btn"></i>
+    </div>
+    <div class="mapa">
+      <img src="static/images/Mapa_de_Colombia.jpg" alt="mapa" class="mapa-img">
+    </div>
+    <ul>
+      <li>
+        <a href="{{url_for('home')}}">
+          <i class="bx bxs-home"></i>
+          <span class="nav-item">Inicio</span>
+        </a>
+        <span class="tooltip">Inicio</span>
+      </li>
+      <li>
+        <a href="{{url_for('ejemplo')}}">
+          <i class="bx bxs-bulb"></i>
+          <span class="nav-item">Ejemplo</span>
+        </a>
+        <span class="tooltip">Ejemplo</span>
+      </li>
+      <li>
+        <a href="{{url_for('datos_SiMEM')}}">
+          <i class="bx bxs-data"></i>
+          <span class="nav-item">SiMEM</span>
+        </a>
+        <span class="tooltip">SiMEM</span>
+      </li>
+      <li>
+        <a href="{{url_for('contacto')}}">
+          <i class="bx bxs-envelope"></i>
+          <span class="nav-item">Contacto</span>
+        </a>
+        <span class="tooltip">Contacto</span>
+      </li>
+    </ul>
+  </div>
+  {% endblock%}
