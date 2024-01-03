@@ -10,11 +10,16 @@ html {
   font-size: 20px
 }
 
+body {
+  position: relative;
+  min-height: 100%;
+}
+
 .sidebar {
   position: absolute;
   top: 0;
   left: 0;
-  height: 100vh;
+  height: 100%;
   width: 80px;
   background-color: #12171e;
   padding: .4rem .8rem;
@@ -172,6 +177,17 @@ html {
 
 
 .plot_box1 {
+  max-width: 1000px;
+  text-align: center;
+  margin: 10px;
+  padding: 40px 20px;
+  border: 15px solid rgb(198, 193, 190);
+  background-color: white;
+  font-size: 25px;
+  border-radius: 20%;
+}
+
+.plot_data_selection {
   max-width: 1000px;
   text-align: center;
   margin: 10px;

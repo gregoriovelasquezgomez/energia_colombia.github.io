@@ -1,106 +1,79 @@
-<!DOCTYPE html>
-<html lang="en" dir="ltr">
-  <head>
-    <meta charset="utf-8">
-    <div class="title">
-      <title>Energía Colombia</title>
+{% extends 'base.html' %}
+{% block content%}
+  <header>
+    <div class="container">
+      <h1 class="logo">
+        Energía Colombia
+      </h1>
+    </div>
+    <div class="parrafo">
+      <p>
+        Con esta app podras consultar datos del SiMEM a través su API. Ingresa los siguientes datos para empezar:
+      </p>
+      <p>Ten en cuenta:</p>
+      <p>Demanda largo plazo: 596c1c</p>
+      <p>Aportes Hidricos: 2bff14</p>
+          
+      <p>Haz click en Enviar para analizar los datos de entrada.</p>
     </div>
 
-    <!-- Chart.js-->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.4/dist/Chart.min.js"></script>
+    <div class="datos_entrada">
+      <form method="POST">
+        <label for="start_date">Fecha de inicio:</label>
+        <input type="text" value="2023-11-22" placeholder="2023-11-22" id="start_date" name="start_date"><br><br>
 
-    <!-- Chartist-->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/chartist.js/latest/chartist.min.css">
-    <script src="https://cdn.jsdelivr.net/chartist.js/latest/chartist.min.js"></script>
+        <label for="end_date">Fecha final:</label>
+        <input type="text" value="2023-11-23" placeholder="2023-11-23"  id="end_date" name="end_date"><br><br>
 
-    <!-- Bootstraps Java Scipts Links -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+        <label for="dataset_id_SiMEM">DatasetID (consulta el id en 
+          <a href="https://www.simem.co/"  target="_blank">https://www.simem.co/</a>
+          ):
+        </label>
+        <input type="text" value="2bff14" placeholder="2bff14"  id="dataset_id_SiMEM" name="dataset_id_SiMEM"><br><br>
 
-    <!-- JQuery links  -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+        <input type="submit" value="Enviar">
+      </form>
+    </div>
 
-    <!-- ruta a embellecedor - css  -->
-    <link rel="stylesheet" href="../static/css/style.css">
-  </head>
-
-  <body>
-    <header>
-      <div class="container">
-        <h1 class="logo">
-          Energía Colombia
-        </h1>
-      </div>
-      <div class="parrafo">
-        <p>
-          Con esta app podras consultar datos del SiMEM a través su API. Ingresa los siguientes datos para empezar:
-        </p>
-        <p>Ten en cuenta:</p>
-        <p>Demanda largo plazo: 596c1c</p>
-        <p>Aportes Hidricos: 2bff14</p>
-            
-        <p>Haz click en Enviar para analizar los datos de entrada.</p>
-      </div>
-
-      <div class="datos_entrada">
-        <form method="POST">
-          <label for="start_date">Fecha de inicio:</label>
-          <input type="text" value="2023-11-22" placeholder="2023-11-22" id="start_date" name="start_date"><br><br>
-
-          <label for="end_date">Fecha final:</label>
-          <input type="text" value="2023-11-23" placeholder="2023-11-23"  id="end_date" name="end_date"><br><br>
-
-          <label for="dataset_id_SiMEM">DatasetID (consulta el id en 
-            <a href="https://www.simem.co/"  target="_blank">https://www.simem.co/</a>
-            ):
-          </label>
-          <input type="text" value="2bff14" placeholder="2bff14"  id="dataset_id_SiMEM" name="dataset_id_SiMEM"><br><br>
-
-          <input type="submit" value="Enviar">
-        </form>
-      </div>
-
-      <div class="plot_data_selection">
-        <!--
-        <table class="table">
-          <tr class="table__header">
-            <th class="table__cell">Variables disponibles en el set de datos:</th>
+    <div class="plot_data_selection">
+      <!--
+      <table class="table">
+        <tr class="table__header">
+          <th class="table__cell">Variables disponibles en el set de datos:</th>
+        </tr>
+        {% for row in data_columns%}
+          <tr class="table__cell">
+            <td>{{row}}</td>
           </tr>
-          {% for row in data_columns%}
-            <tr class="table__cell">
-              <td>{{row}}</td>
-            </tr>
-          {% endfor %}
-        </table>
-        
-
-        <p>Cabecera del set de datos:</p>
-        <p>{{data_norm}}</p>
-        -->
-        
-        <!-- aqui se crean los dropdown menus de las columnas del dataframe que se quieren plotear-->
-        <p>Selecciona los valores de los ejes X y Y del set de datos para graficar</p>
-        <form method="POST" action="/">
-          <label for="x_axis">Valores eje X:</label>
-          <select id="x_axis" name="x_axis", method="POST", action="/", onchange="updatePlot()">
-            {% for column in data_columns[1:] %}
-            <option value="{{column}}" SELECTED>{{column}}</option>
-            {% endfor %}
-          </select>
-        </form>
-        <form method="POST" action="/">
-          <label for="y_axis">Valores eje Y:</label>
-          <select id="y_axis" name="y_axis", method="POST", action="/", onchange="updatePlot()">
-            {% for column in data_columns[1:] %}
-            <option value="{{column}}" SELECTED>{{column}}</option>
-            {% endfor %}
-          </select>
-        </form>
-      </div>
-
+        {% endfor %}
+      </table>
       
+
+      <p>Cabecera del set de datos:</p>
+      <p>{{data_norm}}</p>
+      -->
+      
+      <!-- aqui se crean los dropdown menus de las columnas del dataframe que se quieren plotear-->
+      <p>Selecciona los valores de los ejes X y Y del set de datos para graficar</p>
+      <form method="POST" action="/">
+        <label for="x_axis">Valores eje X:</label>
+        <select id="x_axis" name="x_axis", method="POST", action="/", onchange="updatePlot()">
+          {% for column in data_columns[1:] %}
+          <option value="{{column}}" SELECTED>{{column}}</option>
+          {% endfor %}
+        </select>
+      </form>
+      <form method="POST" action="/">
+        <label for="y_axis">Valores eje Y:</label>
+        <select id="y_axis" name="y_axis", method="POST", action="/", onchange="updatePlot()">
+          {% for column in data_columns[1:] %}
+          <option value="{{column}}" SELECTED>{{column}}</option>
+          {% endfor %}
+        </select>
+      </form>
+    
+
+    
       <!--
       <p>this is the current value of x_axis:</p>
       <p id="x_value_selected"></p>
@@ -250,7 +223,6 @@
           }
             
         </script>
-      
-    </header>
-  </body>
-</html>
+    </div>
+  </header>
+{% endblock %}
